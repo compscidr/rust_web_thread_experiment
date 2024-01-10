@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4"
-crossbeam-queue = "0.3.9"
+crossbeam-queue = "0.3.11"
 rand = "0.8.5"
