@@ -1,14 +1,14 @@
+use actix_web::{get, rt, web, App, HttpServer, Responder};
+use crossbeam_queue::ArrayQueue;
 use std::ops::Deref;
 use std::sync::Arc;
 use std::thread::sleep;
-use actix_web::{get, web, rt, App, HttpServer, Responder};
-use crossbeam_queue::ArrayQueue;
 
 struct MyData {
     queue: ArrayQueue<i32>,
 }
 
-fn manip_queue(data: &MyData)  {
+fn manip_queue(data: &MyData) {
     loop {
         let random_number = rand::random::<i32>();
         println!("Pushing {} to queue", random_number);
@@ -33,16 +33,14 @@ async fn greet(name: web::Path<String>) -> impl Responder {
     format!("Hello {name}!")
 }
 
-
 // todo: perhaps don't use the actix_web::main: https://github.com/actix/actix-web/issues/1283
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
-
     let data = web::Data::new(MyData {
         queue: ArrayQueue::new(10),
     });
 
-    std::thread::spawn( {
+    std::thread::spawn({
         let inner_config = Arc::clone(&data);
         move || {
             manip_queue(inner_config.as_ref().deref());
@@ -55,7 +53,7 @@ async fn main() -> std::io::Result<()> {
             .service(greet)
             .service(display_queue)
     })
-        .bind(("127.0.0.1", 8080))?
-        .run()
-        .await
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }
