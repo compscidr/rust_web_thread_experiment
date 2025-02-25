@@ -1,6 +1,5 @@
-use actix_web::{get, rt, web, App, HttpServer, Responder};
+use actix_web::{get, web, App, HttpServer, Responder};
 use crossbeam_queue::ArrayQueue;
-use std::ops::Deref;
 use std::sync::Arc;
 use std::thread::sleep;
 
@@ -43,7 +42,7 @@ async fn main() -> std::io::Result<()> {
     std::thread::spawn({
         let inner_config = Arc::clone(&data);
         move || {
-            manip_queue(inner_config.as_ref().deref());
+            manip_queue(inner_config.as_ref());
         }
     });
 
