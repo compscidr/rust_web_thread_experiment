@@ -1,6 +1,5 @@
 use actix_web::{get, web, App, HttpServer, Responder};
 use crossbeam_queue::ArrayQueue;
-use std::ops::Deref;
 use std::sync::Arc;
 use std::thread::sleep;
 
